@@ -54,8 +54,9 @@ class ToDoList:
     def get_task(self, task_id):
         return self.tasks.get(task_id)
 
-    def get_all_tasks(self):
-        return list(self.tasks.values())
+    def get_all_tasks(self, sort_key='due_date', ascending=True): # SORTED BY DUE DATE
+        sorted_tasks = sorted(self.tasks.values(), key=lambda x: getattr(x, sort_key), reverse=not ascending)
+        return sorted_tasks
 
     def update_task(self, task_id, updated_data):
         task = self.get_task(task_id)
@@ -71,22 +72,17 @@ class ToDoList:
         return filtered_tasks
 
 
-# Create an instance of ToDoList
 to_do_list = ToDoList()
 
-# Create a new task
 task1 = Task("Task 1", "Description 1", "Subject 1", "2023-01-01", ["topic1", "topic2"])
+task2 = Task("OIM Final Project", "Final website for Problem Solving", "Problem Solving", "2023-12-12", ["API", "Python", "Web App"])
 
-# Add the task to the to-do list
 to_do_list.add_task(task1)
+to_do_list.add_task(task2)
 
-# Update the task status
-to_do_list.update_task(task1.id, {'status': 1})
+# Sort tasks by due date in ascending order
+sorted_duedate = to_do_list.get_all_tasks(sort_key='due_date', ascending=False)
 
-# Filter tasks by status
-in_progress_tasks = to_do_list.filter_tasks('status', 1)
-
-# Display task details
-for task in in_progress_tasks:
+# Display sorted task details
+for task in sorted_duedate:
     print(task.as_dict())
-
