@@ -5,8 +5,6 @@ filters = ["due date", "subject", "priority level", "status"]
 status = {0: "To-Do", 1: "In Progress", 2: "Complete"}
 
 
-
-
 #simplified id
 
 class Task:
@@ -36,17 +34,17 @@ class Task:
 
 
     
-    def get_priority_rating(self, due_date_s):
-        """Function takes the current date and the due date of an assingment to rate it in priority from 1 (not priority) 5 (highest priority)
-        """
-        import maya 
-        # maya.parse(due_date_s).slang_time()
-        self.due_date = maya.parse(due_date_s).datetime()
+    # def get_priority_rating(self, due_date_s):
+    #     """Function takes the current date and the due date of an assingment to rate it in priority from 1 (not priority) 5 (highest priority)
+    #     """
+    #     import maya 
+    #     # maya.parse(due_date_s).slang_time()
+    #     self.due_date = maya.parse(due_date_s).datetime()
 
 
-        self.priority_rating = self.duedate_rating 
+    #     self.priority_rating = self.duedate_rating 
 
-        return self.priority_rating
+    #     return self.priority_rating
 
 
 
