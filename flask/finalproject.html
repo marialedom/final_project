@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your To-Do List</title>
+    <!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+    <!-- Your custom CSS styles (if any) -->
+    <style>
+        /* Add your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your To-Do List</h1>
+
+    <!-- Task Input Form -->
+    <form id="task-form" action="{{ url_for('add_task') }}" method="post">
+        <label for="title">Task Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="due-date">Due Date:</label>
+        <input type="date" id="due-date" name="due-date" required>
+
+        <label for="topics">Topics (comma-separated):</label>
+        <input type="text" id="topics" name="topics">
+
+        <button type="submit">Add Task</button>
+    </form>
+
+    <!-- Calendar Container -->
+    <div id="calendar"></div>
+
+    <!-- Task List -->
+    <h2>Task List</h2>
+    <ul id="task-list">
+        <!-- Tasks will be dynamically added here -->
+        {% for task in tasks %}
+            <li>{{ task.title }} - {{ task.start }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- FullCalendar JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+</body>
+</html>
