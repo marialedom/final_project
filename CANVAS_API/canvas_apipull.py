@@ -16,6 +16,7 @@ class Task:
         self.status = 0  # Default status is "To-Do"
         self.priority_rating = self.get_priority_rating()
         self.pomodoro_timer = None  # Pomodoro timer attribute
+        self.notes = []  # List to store notes
         self.notes_font = None
         self.notes_font_size = None
         self.notes_font_color = None
@@ -37,25 +38,28 @@ class Task:
         else:
             return 3  # Other cases, medium priority
 
-    def start_pomodoro(self, work_minutes=25, break_minutes=5):
-        work_minutes = int(input("Enter Pomodoro work duration in minutes (default is 25): ") or work_minutes)
-        break_minutes = int(input("Enter break duration in minutes (default is 5): ") or work_minutes)
+    def start_pomodoro(self):
+        work_minutes = int(input("Enter Pomodoro work duration in minutes (default is 25): ") or 25)
+        break_minutes = int(input("Enter break duration in minutes (default is 5): ") or 5)
 
-        self.pomodoro_timer = datetime.datetime.now() + datetime.timedelta(minutes=work_minutes)
-        print(f"Pomodoro timer started for {work_minutes} minutes.")
+        while True:
+            self.customize_notes()  # Customize notes before each Pomodoro session
 
-        self.customize_notes()
+            self.pomodoro_timer = datetime.datetime.now() + datetime.timedelta(minutes=work_minutes)
+            print(f"Pomodoro timer started for {work_minutes} minutes.")
 
-        time.sleep(work_minutes * 60)
-        print("Pomodoro work session completed.")
+            time.sleep(work_minutes * 60)
+            print("Pomodoro work session completed.")
 
-        self.pomodoro_timer = datetime.datetime.now() + datetime.timedelta(minutes=break_minutes)
-        print(f"Break timer started for {break_minutes} minutes.")
+            response = input("Do you want to start another Pomodoro session? (yes/no): ")
+            if response.lower() != 'yes':
+                break
 
-        time.sleep(break_minutes * 60)
-        print("Break session completed.")
+            self.pomodoro_timer = datetime.datetime.now() + datetime.timedelta(minutes=break_minutes)
+            print(f"Break timer started for {break_minutes} minutes.")
 
-        self.stop_pomodoro()
+            time.sleep(break_minutes * 60)
+            print("Break session completed.")
 
     def customize_notes(self):
         print("Customize your notes:")
@@ -63,11 +67,15 @@ class Task:
         self.notes_font_size = input("Enter font size (e.g., 12, 14): ")
         self.notes_font_color = input("Enter font color (e.g., red, #00FF00): ")
 
-    def stop_pomodoro(self):
-        self.pomodoro_timer = None
+        # Allow the user to input and store notes
+        while True:
+            note = input("Enter a note (or enter 'done' to finish): ")
+            if note.lower() == 'done':
+                break
+            self.notes.append({"timestamp": datetime.datetime.now(), "note": note})
 
-    def add_note(self, note):
-        self.notes.append({"timestamp": datetime.datetime.now(), "note": note})
+    def stop_pomodoro(self):
+        self.pomodoro_timer = []
 
     def as_dict(self):
         return {
@@ -83,7 +91,8 @@ class Task:
             "Notes": {
                 "Font": self.notes_font,
                 "Font Size": self.notes_font_size,
-                "Font Color": self.notes_font_color
+                "Font Color": self.notes_font_color,
+                "Notes List": self.notes
             }
         }
 
