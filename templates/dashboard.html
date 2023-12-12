@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management Dashboard</title>
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8d7da; /* Light pink background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            max-width: 1200px;
+            width: 100%;
+            background-color: #ffffff; /* White box background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px; /* Add margin for a spaced-out look */
+        }
+
+        .feature-box {
+            flex: 1 0 300px;
+            margin: 10px;
+            padding: 20px;
+            background-color: #ffffff; /* White box background */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .feature-box:hover {
+            transform: scale(1.05);
+        }
+
+        /* Additional styles for task list and categorization */
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-item {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .category-columns {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .category-box {
+            width: 22%;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: center;
+        }
+
+        /* Modified styles for the Notes feature */
+        #notes {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            resize: vertical; /* Allowing vertical resizing */
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Task Input Box -->
+        <div class="feature-box">
+            <h2>Task Input</h2>
+            <label for="task-title">Task Title:</label>
+            <input type="text" id="task-title" required>
+            <!-- Add other input fields as needed -->
+            <button onclick="addTask()">Add Task</button>
+        </div>
+
+        <!-- Pomodoro Timer Box -->
+        <div class="feature-box">
+            <h2>Pomodoro Timer</h2>
+            <button onclick="startPomodoro()">Start Pomodoro</button>
+            <button onclick="stopPomodoro()">Stop Pomodoro</button>
+        </div>
+
+        <!-- Notes Box -->
+        <div class="feature-box">
+            <h2>Notes</h2>
+            <!-- Modified textarea for notes -->
+            <textarea id="notes" rows="5"></textarea>
+        </div>
+
+        <!-- Task List and Categorization -->
+        <div class="feature-box">
+            <h2>Task List</h2>
+            <ul class="task-list" id="task-list"></ul>
+
+            <div class="category-columns">
+                <div class="category-box" onclick="categorizeTasks('due-soon')">Due Soon</div>
+                <div class="category-box" onclick="categorizeTasks('long-term')">Long Term</div>
+                <div class="category-box" onclick="categorizeTasks('more-than-2-days')">More than 2 Days</div>
+                <div class="category-box" onclick="categorizeTasks('backtracked')">Backtracked</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Due in 24-48 hrs</th>
+                        <th>&lt;2 days to complete</th>
+                        <th>Are you backtracked</th>
+                        <th>Long-term assignment</th>
+                    </tr>
+                </thead>
+                <tbody id="task-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript functions for handling actions -->
+    <script>
+        function addTask() {
+            var taskTitle = document.getElementById('task-title').value;
+            if (taskTitle) {
+                var taskList = document.getElementById('task-list');
+                var taskItem = document.createElement('li');
+                taskItem.classList.add('task-item');
+                taskItem.textContent = taskTitle;
+                taskList.appendChild(taskItem);
+
+                addToTaskTable(taskTitle);
+
+                alert('Task added!');
+            } else {
+                alert('Please enter a task title.');
+            }
+        }
+
+        function startPomodoro() {
+            alert('Pomodoro started!');
+        }
+
+        function stopPomodoro() {
+            alert('Pomodoro stopped!');
+            clearInterval(pomodoroInterval);
+        }
+
+        function customizeNotes() {
+            alert('Customize notes!');
+        }
+
+        function categorizeTasks(category) {
+            alert('Tasks categorized as: ' + category);
+        }
+
+        function addToTaskTable(taskTitle) {
+            var taskTableBody = document.getElementById('task-table-body');
+            var newRow = taskTableBody.insertRow();
+            
+            var taskCell = newRow.insertCell(0);
+            var dueSoonCell = newRow.insertCell(1);
+            var lessThan2DaysCell = newRow.insertCell(2);
+            var backtrackedCell = newRow.insertCell(3);
+            var longTermCell = newRow.insertCell(4);
+
+            createCheckbox(taskCell, taskTitle);
+            createCheckbox(dueSoonCell);
+            createCheckbox(lessThan2DaysCell);
+            createCheckbox(backtrackedCell);
+            createCheckbox(longTermCell);
+        }
+
+        function createCheckbox(cell, value) {
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = value || '';
+            cell.appendChild(checkbox);
+        }
+    </script>
+    <!-- Pomodoro Timer script -->
+    <script>
+        // Pomodoro timer variables
+        var pomodoroInterval;
+        var workTime = 25 * 60; // 25 minutes in seconds
+        var breakTime = 5 * 60; // 5 minutes in seconds
+        function startPomodoro() {
+            alert('Pomodoro started!');
+    
+            // Initialize the Pomodoro interval
+            pomodoroInterval = setInterval(function () {
+                if (workTime > 0) {
+                    // If there's work time left, decrement it
+                    workTime--;
+                    updateTimerDisplay(workTime);
+                } else if (breakTime > 0) {
+                    // If work time is over and there's break time left, decrement it
+                    breakTime--;
+                    updateTimerDisplay(breakTime);
+                } else {
+                    // If both work and break times are over, reset the timer for the next cycle
+                    workTime = 25 * 60; // Reset work time to 25 minutes
+                    breakTime = 5 * 60; // Reset break time to 5 minutes
+                    updateTimerDisplay(workTime);
+                }
+            }, 1000);
+        }
+    
+        // Function to pause or stop the Pomodoro timer
+        function stopPomodoro() {
+            alert('Pomodoro stopped!');
+            clearInterval(pomodoroInterval);
+        }
+    
+        // Function to update the timer display
+        function updateTimerDisplay(timeInSeconds) {
+            var minutes = Math.floor(timeInSeconds / 60);
+            var seconds = timeInSeconds % 60;
+            var formattedTime = padZero(minutes) + ':' + padZero(seconds);
+            document.getElementById('timer').textContent = formattedTime;
+        }
+    
+        // Function to pad zero to single-digit numbers
+        function padZero(number) {
+            return number < 10 ? '0' + number : number;
+        }
+    </script>
