@@ -120,6 +120,7 @@
     
                 <label for="subject/category">Subject:</label>
                 <input type="text" id="subject/category" name="subject" placeholder="Subject" required>
+
     
                 <label for="due_date">Due Date:</label>
                 <input type="date" id="due_date" name="due_date" required>
@@ -127,9 +128,27 @@
                 <label for="topics">Topics (comma-separated):</label>
                 <input type="text" id="topics" name="topics" placeholder="topic1, topic2">
 
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="select">Select</option>
+                    <option value="To-Do">To-Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Complete">Complete</option>
+                </select>
+        
                 <button type="submit">Add Task</button>
 
             </form>
+        </div>
+        <div id="task-list">
+            {% for task in tasks %}
+                <div class="task-item">
+                    <h3>{{ task.title }}</h3>
+                    <p>Description: {{ task.description }}</p>
+                    <p>Due Date: {{ task.due_date.strftime('%Y-%m-%d') }}</p>
+                    <p>Status: {{ task.status }}</p> 
+                </div>
+            {% endfor %}
         </div>
 
         <!-- Filter Options -->
@@ -151,11 +170,6 @@
     <button onclick="applyFilters()">Apply Filters</button>
 </div>
 
-<!-- Task Display Area -->
-<div id="task-list">
-    <!-- Tasks will be displayed here -->
-</div>
-
         <!-- Pomodoro Timer Box -->
         <div class="feature-box">
             <h2>Pomodoro Timer</h2>
@@ -171,6 +185,23 @@
             <button onclick="addNote()">Add Note</button>
             <div id="notes-container"></div>
         </div>
+
+        <div id="calendar"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [
+                // Your task data here
+                { title: 'Task 1', start: '2023-04-01' },
+                // ...
+            ]
+        });
+        calendar.render();
+    });
+    </script>
 
         <!-- Task List and Categorization
         <div class="feature-box">
