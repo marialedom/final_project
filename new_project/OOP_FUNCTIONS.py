@@ -14,9 +14,9 @@ class Task:
         self.status = 0  # Default status is "To-Do"
         self.priority_rating = self.get_priority_rating()
 
-    def parse_due_date(self, due_date_s):
-        # Assuming the date string is in the format 'YYYY-MM-DD'
-        return datetime.datetime.strptime(due_date_s, '%Y-%m-%d')
+    # def parse_due_date(self, due_date_s):
+    #     # Assuming the date string is in the format 'YYYY-MM-DD'
+    #     return datetime.datetime.strptime(due_date_s, '%Y-%m-%d')
 
     def get_priority_rating(self):
         current_date = datetime.datetime.now()
@@ -50,6 +50,7 @@ class ToDoList:
 
     def add_task(self, task):
         self.tasks[task.id] = task
+        return(self)
 
     def get_task(self, task_id):
         return self.tasks.get(task_id)
